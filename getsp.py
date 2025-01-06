@@ -14,7 +14,7 @@ price = float(soup.find(class_=class1).text.strip()[0:].replace(",",""))
 print(price)
 
 toast = Notification(app_id="vinworld script",
-                     title="Stock price",
+                     title="Latest Stock price",
                      msg=f'alert got triggered for {ticker} and price is {price}',
                      duration="short")
 
