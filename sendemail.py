@@ -2,6 +2,7 @@ import smtplib
 import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from getsp import getsp
 
 # Create an empty dictionary to store key-value pairs
 key_value_dict = {}
@@ -29,7 +30,7 @@ body = "This is a test email sent from Python."
 message = MIMEMultipart()
 message["From"] = sender_email
 message["To"] = receiver_email
-message["Subject"] = subject
+#message["Subject"] = subject
 
 # Add the body text to the email
 message.attach(MIMEText(body, "plain"))
@@ -39,15 +40,22 @@ smtp_server = "smtp.gmail.com"
 smtp_port = 587
 
 # Send the email
-try:
-    # Establish a secure session with Gmail's SMTP server
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()  # Secure the connection
-        server.login(sender_email, password)  # Login to the email account
-        text = message.as_string()  # Convert the message to string format
-        server.sendmail(sender_email, receiver_email, text)  # Send the email
+def main():
+    current_level = getsp()
+    subject = "Current level of Nifty50 is " + str(current_level)
+    message["Subject"] = subject
+    try:
+        # Establish a secure session with Gmail's SMTP server
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()  # Secure the connection
+            server.login(sender_email, password)  # Login to the email account
+            text = message.as_string()  # Convert the message to string format
+            server.sendmail(sender_email, receiver_email, text)  # Send the email
 
-    print("Email sent successfully!")
+        print("Email sent successfully!")
 
-except Exception as e:
-    print(f"Error occurred: {e}")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
